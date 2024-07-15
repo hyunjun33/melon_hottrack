@@ -1,5 +1,6 @@
 from __future__ import annotations
 from django.db import models
+from django.utils.html import format_html
 
 
 from datetime import date
@@ -29,6 +30,10 @@ class Song(models.Model):
     # genre: str
     # release_date: date
     # like_count: int
+
+    @property
+    def cover_image_tag(self):
+        return format_html('<img src="{}" style="width: 50px" />', self.cover_url)
 
     @property
     def melon_detail_url(self) -> str:
