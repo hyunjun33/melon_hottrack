@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-)5$y5vyzj*7ue#m^p8@^cv&-1xob8b*d9vw_g4_$d)f$qu!r@a"
+SECRET_KEY = "django-insecure-85xesvg!4frshdq(@p#4a#h_9^k%p5_d)y!@kks_v+mnn53@2+"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_bootstrap5",
+    "core",
     "hottrack",
 ]
 
@@ -44,7 +46,6 @@ if DEBUG:
     INSTALLED_APPS += [
         "debug_toolbar",
     ]
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -66,7 +67,9 @@ ROOT_URLCONF = "mysite.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "mysite" / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -74,6 +77,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.messages_list",
             ],
         },
     },
@@ -115,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "ko-kr"
+LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
 
@@ -136,5 +140,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # django-debug-toolbar
-
 INTERNAL_IPS = ["127.0.0.1"]
+
+
+# messages framework
+
+from django.contrib.messages import constants as messages_constraints
+
+if DEBUG:
+    MESSAGE_LEVEL = messages_constraints.DEBUG
