@@ -9,6 +9,8 @@ import pandas as pd
 from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView
+
 
 from hottrack.models import Song
 from hottrack.utils.cover import make_cover_image
@@ -54,6 +56,28 @@ def index(request: HttpRequest, release_date: datetime.date = None) -> HttpRespo
             "query": query,
         },
     )
+
+
+class SongDetailView(DetailView):
+    model = Song
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        melon_uid = self.kwargs.get("melon_uid")
+        if melon_uid:
+            return get_object_or_404(queryset, melon_uid=melon_uid)
+
+        return super().get_object(queryset)
+
+
+song_detail = SongDetailView.as_view()
+
+
+# song_detail = DetailView.as_view(
+#     model=Song, slug_field="melon_uid", slug_url_kwarg="melon_uid"
+# )
 
 
 def cover_png(request, pk):
