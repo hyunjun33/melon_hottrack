@@ -9,7 +9,13 @@ import pandas as pd
 from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import DetailView, ListView
+from django.views.generic import (
+    DetailView,
+    ListView,
+    YearArchiveView,
+    MonthArchiveView,
+    DayArchiveView,
+)
 
 
 from hottrack.models import Song
@@ -129,3 +135,22 @@ def export(request, format: Literal["csv", "xlsx"]):
     response["Content-Disposition"] = 'attachment; filename="{}'.format(filename)
 
     return response
+
+
+class SongYearArchiveView(YearArchiveView):
+    model = Song
+    date_field = "release_date"
+    make_object_list = True
+
+
+class SongMonthArchiveView(MonthArchiveView):
+    model = Song
+    date_field = "release_date"
+    # 날짜 포맷 : "%m" 숫자 "%b" 월 이름의 약어 "Jan" "Feb" 등
+    month_format = "%m"
+
+
+class SongDayArchiveView(DayArchiveView):
+    model = Song
+    date_field = "release_date"
+    month_format = "%m"
